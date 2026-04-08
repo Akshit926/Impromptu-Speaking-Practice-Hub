@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Practice Hub | Wakad Toastmasters</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+    <!-- External CSS -->
+    <link rel="stylesheet" href="./style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<!-- NAV -->
+<nav class="practice-nav">
+    <div class="brand"><i data-lucide="mic-2"></i> <span>SpeechCrafter</span> Hub</div>
+</nav>
+<!-- HERO -->
+<div class="practice-hero">
+    <h1>Your <span>Speaking</span> Canvas</h1>
+    <p>Impromptu topics • Speech tracker • Tips • Word of the Day</p>
+</div>
+<!-- TABS -->
+<div class="practice-tabs">
+    <button class="ptab active" onclick="switchTab('impromptu', this)"><i data-lucide="dices"></i> Impromptu Topics</button>
+    <button class="ptab" onclick="switchTab('speeches', this)"><i data-lucide="layout-list"></i> Speech Tracker</button>
+    <button class="ptab" onclick="switchTab('tips', this)"><i data-lucide="lightbulb"></i> Speaking Tips</button>
+    <button class="ptab" onclick="switchTab('vocab', this)"><i data-lucide="book-open-text"></i> Word of the Day</button>
+</div>
+<!-- CONTENT -->
+<div class="practice-content">
+    <!-- ===== IMPROMPTU ===== -->
+    <div class="practice-panel active" id="panel-impromptu">
+        <div class="impromptu-layout">
+            <!-- SETTINGS -->
+            <div class="settings-card glass-panel">
+                <div class="panel-header">
+                    <i data-lucide="sliders-horizontal"></i>
+                    <h3>Settings</h3>
+                </div>
+                <div class="setting-group">
+                    <label>Level</label>
+                    <div class="level-btns">
+                        <button class="level-btn active" onclick="setLevel('beginner', this)"><i data-lucide="signal-low"></i> Beginner</button>
+                        <button class="level-btn" onclick="setLevel('intermediate', this)"><i data-lucide="signal-medium"></i> Intermediate</button>
+                        <button class="level-btn" onclick="setLevel('advanced', this)"><i data-lucide="signal-high"></i> Advanced</button>
+                        <button class="level-btn" onclick="setLevel('all', this)"><i data-lucide="target"></i> All Levels</button>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <label>Category</label>
+                    <select class="category-select" id="topicCategory">
+                        <option value="all">All Categories</option>
+                        <option value="personal">Personal Experience</option>
+                        <option value="opinion">Opinion & Debate</option>
+                        <option value="storytelling">Storytelling</option>
+                        <option value="professional">Professional</option>
+                        <option value="creative">Creative</option>
+                        <option value="proverbs">Proverbs</option>
+                        <option value="situational">Situational</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label>Timer Duration</label>
+                    <div class="timer-presets">
+                        <button class="timer-preset" onclick="setDuration(60, this)">1m</button>
+                        <button class="timer-preset active" onclick="setDuration(90, this)">1.5m</button>
+                        <button class="timer-preset" onclick="setDuration(120, this)">2m</button>
+                        <button class="timer-preset" onclick="setDuration(180, this)">3m</button>
+                        <button class="timer-preset" onclick="setDuration(300, this)">5m</button>
+                    </div>
+                </div>
+            </div>
+            <!-- TOPIC + TIMER -->
+            <div class="topic-display-area">
+                <!-- Topic -->
+                <div class="topic-card glass-panel" id="topicCard">
+                    <div class="topic-placeholder">
+                        <i data-lucide="dices" style="width: 48px; height: 48px; color: var(--accent); margin-bottom: 16px;"></i>
+                        <p>Click "Generate Topic" to begin</p>
+                    </div>
+                </div>
+                <!-- Buttons -->
+                <div class="generate-section">
+                    <button class="generate-btn primary-btn" onclick="generateTopic()"><i data-lucide="sparkles"></i> Generate Topic</button>
+                    <button class="skip-btn outline-btn" onclick="generateTopic()">Skip <i data-lucide="arrow-right"></i></button>
+                </div>
+                <!-- Timer -->
+                <div class="timer-card glass-panel">
+                    <div class="timer-display">
+                        <div class="timer-circle" id="timerCircle">
+                            <span id="timerDisplay">1:30</span>
+                        </div>
+                        <div class="timer-status" id="timerStatus">Ready</div>
+                    </div>
+                    <div class="timer-btns">
+                        <button class="timer-btn start" id="startBtn" onclick="startTimer()"><i data-lucide="play"></i> Start</button>
+                        <button class="timer-btn pause" id="pauseBtn" onclick="pauseTimer()" style="display:none"><i data-lucide="pause"></i> Pause</button>
+                        <button class="timer-btn reset" onclick="resetTimer()"><i data-lucide="rotate-ccw"></i> Reset</button>
+                    </div>
+                </div>
+                <!-- History -->
+                <div class="topic-history glass-panel" id="topicHistory" style="display:none;">
+                    <div class="panel-header">
+                        <i data-lucide="history"></i>
+                        <h4>Recent Topics</h4>
+                    </div>
+                    <div id="historyList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ===== SPEECH TRACKER ===== -->
+    <div class="practice-panel" id="panel-speeches">
+        <div class="center-content">
+            <div class="panel-header center">
+                <i data-lucide="clipboard-list"></i>
+                <h2>My Speech Tracker</h2>
+            </div>
+            <button class="add-speech-btn primary-btn" onclick="toggleSpeechForm()"><i data-lucide="plus"></i> Log New Speech</button>
+            <div class="speech-form-card glass-panel" id="speechForm">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Speech Title</label>
+                        <input type="text" id="sfTitle" placeholder="e.g., The Icebreaker">
+                    </div>
+                    <div class="input-group">
+                        <label>Role</label>
+                        <select id="sfRole">
+                            <option value="Prepared Speech">Prepared Speech</option>
+                            <option value="Table Topics">Table Topics</option>
+                            <option value="Evaluator">Evaluator</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Project / Path</label>
+                        <input type="text" id="sfPath" placeholder="e.g., Presentation Mastery">
+                    </div>
+                    <div class="input-group">
+                        <label>Date</label>
+                        <input type="date" id="sfDate">
+                    </div>
+                    <div class="input-group full-width">
+                        <label>Evaluation Score (1-10)</label>
+                        <input type="number" id="sfScore" min="1" max="10" placeholder="e.g., 8">
+                    </div>
+                </div>
+                <button class="save-btn primary-btn full-width" onclick="addSpeech()">Save Log</button>
+            </div>
+            <div id="speechesGrid" class="speeches-grid"></div>
+        </div>
+    </div>
+    <!-- ===== TIPS ===== -->
+    <div class="practice-panel" id="panel-tips">
+        <div class="panel-header center">
+            <i data-lucide="zap"></i>
+            <h2>Pro Speaking Tips</h2>
+        </div>
+        <div class="tips-grid" id="tipsGrid"></div>
+    </div>
+    <!-- ===== WORD OF THE DAY ===== -->
+    <div class="practice-panel" id="panel-vocab">
+        <div class="center-content">
+            <div class="wotd-flashcard glass-panel">
+                <div class="wotd-header">
+                    <span class="wotd-label">Word of the Day</span>
+                    <button class="icon-btn" onclick="pronounceWord()" title="Listen">
+                        <i data-lucide="volume-2"></i>
+                    </button>
+                </div>
+                <h2 id="wotdWord" class="word-title">Perspicacious</h2>
+                <div class="word-meta">
+                    <span id="wotdPos" class="pos-badge">adjective</span>
+                    <span id="wotdPronunciation" class="pronunciation">/ˌpər-spə-ˈkā-shəs/</span>
+                </div>
+                <div class="word-details">
+                    <div class="detail-section">
+                        <h4>Definition</h4>
+                        <p id="wotdDef">Having a ready insight into and understanding of things.</p>
+                    </div>
+                    <div class="detail-section">
+                        <h4>Synonyms</h4>
+                        <p id="wotdSynonyms" class="synonyms-list">shrewd, perceptive, astute</p>
+                    </div>
+                    <div class="detail-section example-section">
+                        <h4>Example</h4>
+                        <p id="wotdExample" class="example-text">"It offers quite a few facts to the perspicacious reporter."</p>
+                    </div>
+                </div>
+                <button class="new-word-btn primary-btn" onclick="newWord()">
+                    <i data-lucide="refresh-cw"></i> Next Word
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- External JS -->
+<script src="./script.js"></script>
+<!-- Initialize Lucide Icons -->
+<script>
+  lucide.createIcons();
+</script>
+</body>
+</html>
