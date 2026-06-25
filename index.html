@@ -1,207 +1,766 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speech Practice Hub | Wakad Toastmasters</title>
+    <title>Speech Practice Hub | Professional Toastmasters Canvas</title>
+    <meta name="description"
+        content="Master impromptu speaking, prepare scripts, track speech times, and count filler words with live AI feedback and timing lights.">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800;900&display=swap"
+        rel="stylesheet">
     <!-- External CSS -->
     <link rel="stylesheet" href="./style.css">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body>
-<!-- NAV -->
-<nav class="practice-nav">
-    <div class="brand"><i data-lucide="mic-2"></i> <span>SpeechCrafter</span> Hub</div>
-</nav>
-<!-- HERO -->
-<div class="practice-hero">
-    <h1>Your <span>Speaking</span> Canvas</h1>
-    <p>Impromptu topics • Speech tracker • Tips • Word of the Day</p>
-</div>
-<!-- TABS -->
-<div class="practice-tabs">
-    <button class="ptab active" onclick="switchTab('impromptu', this)"><i data-lucide="dices"></i> Impromptu Topics</button>
-    <button class="ptab" onclick="switchTab('speeches', this)"><i data-lucide="layout-list"></i> Speech Tracker</button>
-    <button class="ptab" onclick="switchTab('tips', this)"><i data-lucide="lightbulb"></i> Speaking Tips</button>
-    <button class="ptab" onclick="switchTab('vocab', this)"><i data-lucide="book-open-text"></i> Word of the Day</button>
-</div>
-<!-- CONTENT -->
-<div class="practice-content">
-    <!-- ===== IMPROMPTU ===== -->
-    <div class="practice-panel active" id="panel-impromptu">
-        <div class="impromptu-layout">
-            <!-- SETTINGS -->
-            <div class="settings-card glass-panel">
-                <div class="panel-header">
-                    <i data-lucide="sliders-horizontal"></i>
-                    <h3>Settings</h3>
+
+    <div class="app-container">
+        <!-- SIDEBAR NAV -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-logo">
+                    <i data-lucide="mic-2"></i>
                 </div>
-                <div class="setting-group">
-                    <label>Level</label>
-                    <div class="level-btns">
-                        <button class="level-btn active" onclick="setLevel('beginner', this)"><i data-lucide="signal-low"></i> Beginner</button>
-                        <button class="level-btn" onclick="setLevel('intermediate', this)"><i data-lucide="signal-medium"></i> Intermediate</button>
-                        <button class="level-btn" onclick="setLevel('advanced', this)"><i data-lucide="signal-high"></i> Advanced</button>
-                        <button class="level-btn" onclick="setLevel('all', this)"><i data-lucide="target"></i> All Levels</button>
-                    </div>
-                </div>
-                <div class="setting-group">
-                    <label>Category</label>
-                    <select class="category-select" id="topicCategory">
-                        <option value="all">All Categories</option>
-                        <option value="personal">Personal Experience</option>
-                        <option value="opinion">Opinion & Debate</option>
-                        <option value="storytelling">Storytelling</option>
-                        <option value="professional">Professional</option>
-                        <option value="creative">Creative</option>
-                        <option value="proverbs">Proverbs</option>
-                        <option value="situational">Situational</option>
-                    </select>
-                </div>
-                <div class="setting-group">
-                    <label>Timer Duration</label>
-                    <div class="timer-presets">
-                        <button class="timer-preset" onclick="setDuration(60, this)">1m</button>
-                        <button class="timer-preset active" onclick="setDuration(90, this)">1.5m</button>
-                        <button class="timer-preset" onclick="setDuration(120, this)">2m</button>
-                        <button class="timer-preset" onclick="setDuration(180, this)">3m</button>
-                        <button class="timer-preset" onclick="setDuration(300, this)">5m</button>
-                    </div>
+                <div class="brand-text">
+                    <h3>Speech<span>Crafter</span></h3>
+                    <p>Toastmasters Suite</p>
                 </div>
             </div>
-            <!-- TOPIC + TIMER -->
-            <div class="topic-display-area">
-                <!-- Topic -->
-                <div class="topic-card glass-panel" id="topicCard">
-                    <div class="topic-placeholder">
-                        <i data-lucide="dices" style="width: 48px; height: 48px; color: var(--accent); margin-bottom: 16px;"></i>
-                        <p>Click "Generate Topic" to begin</p>
-                    </div>
-                </div>
-                <!-- Buttons -->
-                <div class="generate-section">
-                    <button class="generate-btn primary-btn" onclick="generateTopic()"><i data-lucide="sparkles"></i> Generate Topic</button>
-                    <button class="skip-btn outline-btn" onclick="generateTopic()">Skip <i data-lucide="arrow-right"></i></button>
-                </div>
-                <!-- Timer -->
-                <div class="timer-card glass-panel">
-                    <div class="timer-display">
-                        <div class="timer-circle" id="timerCircle">
-                            <span id="timerDisplay">1:30</span>
-                        </div>
-                        <div class="timer-status" id="timerStatus">Ready</div>
-                    </div>
-                    <div class="timer-btns">
-                        <button class="timer-btn start" id="startBtn" onclick="startTimer()"><i data-lucide="play"></i> Start</button>
-                        <button class="timer-btn pause" id="pauseBtn" onclick="pauseTimer()" style="display:none"><i data-lucide="pause"></i> Pause</button>
-                        <button class="timer-btn reset" onclick="resetTimer()"><i data-lucide="rotate-ccw"></i> Reset</button>
-                    </div>
-                </div>
-                <!-- History -->
-                <div class="topic-history glass-panel" id="topicHistory" style="display:none;">
-                    <div class="panel-header">
-                        <i data-lucide="history"></i>
-                        <h4>Recent Topics</h4>
-                    </div>
-                    <div id="historyList"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ===== SPEECH TRACKER ===== -->
-    <div class="practice-panel" id="panel-speeches">
-        <div class="center-content">
-            <div class="panel-header center">
-                <i data-lucide="clipboard-list"></i>
-                <h2>My Speech Tracker</h2>
-            </div>
-            <button class="add-speech-btn primary-btn" onclick="toggleSpeechForm()"><i data-lucide="plus"></i> Log New Speech</button>
-            <div class="speech-form-card glass-panel" id="speechForm">
-                <div class="form-grid">
-                    <div class="input-group">
-                        <label>Speech Title</label>
-                        <input type="text" id="sfTitle" placeholder="e.g., The Icebreaker">
-                    </div>
-                    <div class="input-group">
-                        <label>Role</label>
-                        <select id="sfRole">
-                            <option value="Prepared Speech">Prepared Speech</option>
-                            <option value="Table Topics">Table Topics</option>
-                            <option value="Evaluator">Evaluator</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label>Project / Path</label>
-                        <input type="text" id="sfPath" placeholder="e.g., Presentation Mastery">
-                    </div>
-                    <div class="input-group">
-                        <label>Date</label>
-                        <input type="date" id="sfDate">
-                    </div>
-                    <div class="input-group full-width">
-                        <label>Evaluation Score (1-10)</label>
-                        <input type="number" id="sfScore" min="1" max="10" placeholder="e.g., 8">
-                    </div>
-                </div>
-                <button class="save-btn primary-btn full-width" onclick="addSpeech()">Save Log</button>
-            </div>
-            <div id="speechesGrid" class="speeches-grid"></div>
-        </div>
-    </div>
-    <!-- ===== TIPS ===== -->
-    <div class="practice-panel" id="panel-tips">
-        <div class="panel-header center">
-            <i data-lucide="zap"></i>
-            <h2>Pro Speaking Tips</h2>
-        </div>
-        <div class="tips-grid" id="tipsGrid"></div>
-    </div>
-    <!-- ===== WORD OF THE DAY ===== -->
-    <div class="practice-panel" id="panel-vocab">
-        <div class="center-content">
-            <div class="wotd-flashcard glass-panel">
-                <div class="wotd-header">
-                    <span class="wotd-label">Word of the Day</span>
-                    <button class="icon-btn" onclick="pronounceWord()" title="Listen">
-                        <i data-lucide="volume-2"></i>
-                    </button>
-                </div>
-                <h2 id="wotdWord" class="word-title">Perspicacious</h2>
-                <div class="word-meta">
-                    <span id="wotdPos" class="pos-badge">adjective</span>
-                    <span id="wotdPronunciation" class="pronunciation">/ˌpər-spə-ˈkā-shəs/</span>
-                </div>
-                <div class="word-details">
-                    <div class="detail-section">
-                        <h4>Definition</h4>
-                        <p id="wotdDef">Having a ready insight into and understanding of things.</p>
-                    </div>
-                    <div class="detail-section">
-                        <h4>Synonyms</h4>
-                        <p id="wotdSynonyms" class="synonyms-list">shrewd, perceptive, astute</p>
-                    </div>
-                    <div class="detail-section example-section">
-                        <h4>Example</h4>
-                        <p id="wotdExample" class="example-text">"It offers quite a few facts to the perspicacious reporter."</p>
-                    </div>
-                </div>
-                <button class="new-word-btn primary-btn" onclick="newWord()">
-                    <i data-lucide="refresh-cw"></i> Next Word
+
+            <nav class="sidebar-menu">
+                <button class="menu-tab active" id="tab-dashboard" onclick="switchTab('dashboard', this)">
+                    <i data-lucide="layout-dashboard"></i> <span>Dashboard</span>
                 </button>
+                <button class="menu-tab" id="tab-impromptu" onclick="switchTab('impromptu', this)">
+                    <i data-lucide="dices"></i> <span>Impromptu Room</span>
+                </button>
+                <button class="menu-tab" id="tab-prepared" onclick="switchTab('prepared', this)">
+                    <i data-lucide="file-text"></i> <span>Prepared Practice</span>
+                </button>
+                <button class="menu-tab" id="tab-builder" onclick="switchTab('builder', this)">
+                    <i data-lucide="pen-tool"></i> <span>Outline Builder</span>
+                </button>
+                <button class="menu-tab" id="tab-speeches" onclick="switchTab('speeches', this)">
+                    <i data-lucide="history"></i> <span>Speech Logs</span>
+                </button>
+                <button class="menu-tab" id="tab-tips" onclick="switchTab('tips', this)">
+                    <i data-lucide="lightbulb"></i> <span>Speaking Tips</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-badge">
+                    <div class="user-avatar"><i data-lucide="award"></i></div>
+                    <div class="user-info">
+                        <h4>Speaker Canvas</h4>
+                        <p class="user-rank">Toastmaster Rank</p>
+                    </div>
+                </div>
             </div>
-        </div>
+        </aside>
+
+        <!-- MAIN CONTENT WRAPPER -->
+        <main class="main-content">
+            <!-- TOP NAV FOR MOBILE / METRICS -->
+            <header class="top-nav">
+                <div class="mobile-brand">
+                    <i data-lucide="mic-2"></i> <span>SpeechCrafter</span>
+                </div>
+                <div class="header-actions">
+                    <span class="active-badge"><span class="pulse-dot"></span> Live Transcribing Ready</span>
+                </div>
+            </header>
+
+            <!-- CONTENT PANELS -->
+            <div class="panels-container">
+
+                <!-- ===== DASHBOARD PANEL ===== -->
+                <div class="practice-panel active" id="panel-dashboard">
+                    <div class="dashboard-grid">
+                        <!-- Left: Welcomes & Stats -->
+                        <div class="dashboard-main">
+                            <div class="welcome-card glass-panel">
+                                <h1>Welcome Back, <span>Communicator</span>!</h1>
+                                <p>Ready to build your confidence today? Select a practice room or structure a speech
+                                    script to begin.</p>
+                                <div class="welcome-actions">
+                                    <button class="primary-btn"
+                                        onclick="switchTab('impromptu', document.getElementById('tab-impromptu'))">
+                                        <i data-lucide="play"></i> Table Topics Room
+                                    </button>
+                                    <button class="outline-btn"
+                                        onclick="switchTab('builder', document.getElementById('tab-builder'))">
+                                        <i data-lucide="plus-circle"></i> Create Script Outline
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Statistics Widgets -->
+                            <div class="stats-row">
+                                <div class="stat-card glass-panel">
+                                    <div class="stat-icon purple"><i data-lucide="video"></i></div>
+                                    <div class="stat-value" id="statSpeeches">0</div>
+                                    <div class="stat-label">Speeches Logged</div>
+                                </div>
+                                <div class="stat-card glass-panel">
+                                    <div class="stat-icon emerald"><i data-lucide="gauge"></i></div>
+                                    <div class="stat-value" id="statPacing">0 <span class="unit">wpm</span></div>
+                                    <div class="stat-label">Avg Speaking Pace</div>
+                                </div>
+                                <div class="stat-card glass-panel">
+                                    <div class="stat-icon yellow"><i data-lucide="mic-off"></i></div>
+                                    <div class="stat-value" id="statFillers">0</div>
+                                    <div class="stat-label">Filler Words Logged</div>
+                                </div>
+                                <div class="stat-card glass-panel">
+                                    <div class="stat-icon blue"><i data-lucide="star"></i></div>
+                                    <div class="stat-value" id="statAvgScore">0.0<span class="unit">/10</span></div>
+                                    <div class="stat-label">Average Score</div>
+                                </div>
+                            </div>
+
+                            <!-- Dashboard Activity -->
+                            <div class="dashboard-activity glass-panel">
+                                <div class="section-title">
+                                    <i data-lucide="trending-up"></i>
+                                    <h3>Grammarian's Progress Metrics</h3>
+                                </div>
+                                <div class="metrics-summary">
+                                    <p class="metric-desc">Here is your speaking pattern dashboard. Speak regularly to
+                                        reduce filler frequencies.</p>
+                                    <div class="filler-trends" id="fillerTrendsContainer">
+                                        <!-- Filler frequencies shown visually -->
+                                        <div class="trend-bar-group">
+                                            <div class="trend-label">Um / Ah</div>
+                                            <div class="trend-progress-track">
+                                                <div class="trend-progress-fill" id="trendUm" style="width: 0%;"></div>
+                                            </div>
+                                            <div class="trend-count" id="trendUmVal">0</div>
+                                        </div>
+                                        <div class="trend-bar-group">
+                                            <div class="trend-label">Like</div>
+                                            <div class="trend-progress-track">
+                                                <div class="trend-progress-fill" id="trendLike" style="width: 0%;">
+                                                </div>
+                                            </div>
+                                            <div class="trend-count" id="trendLikeVal">0</div>
+                                        </div>
+                                        <div class="trend-bar-group">
+                                            <div class="trend-label">So</div>
+                                            <div class="trend-progress-track">
+                                                <div class="trend-progress-fill" id="trendSo" style="width: 0%;"></div>
+                                            </div>
+                                            <div class="trend-count" id="trendSoVal">0</div>
+                                        </div>
+                                        <div class="trend-bar-group">
+                                            <div class="trend-label">You Know</div>
+                                            <div class="trend-progress-track">
+                                                <div class="trend-progress-fill" id="trendYouKnow" style="width: 0%;">
+                                                </div>
+                                            </div>
+                                            <div class="trend-count" id="trendYouKnowVal">0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Word of the Day & Quick speaking quote -->
+                        <div class="dashboard-sidebar">
+                            <!-- Word of the day nested here -->
+                            <div class="wotd-flashcard glass-panel small-flashcard">
+                                <div class="wotd-header">
+                                    <span class="wotd-label">Word of the Day</span>
+                                    <button class="icon-btn" onclick="pronounceWord()" title="Listen">
+                                        <i data-lucide="volume-2"></i>
+                                    </button>
+                                </div>
+                                <h2 id="wotdWord" class="word-title">Perspicacious</h2>
+                                <div class="word-meta">
+                                    <span id="wotdPos" class="pos-badge">adjective</span>
+                                    <span id="wotdPronunciation" class="pronunciation">/ˌpər-spə-ˈkā-shəs/</span>
+                                </div>
+                                <div class="word-details">
+                                    <div class="detail-section">
+                                        <h4>Definition</h4>
+                                        <p id="wotdDef" style="font-size: 0.95rem;">Having a ready insight into and
+                                            understanding of things.</p>
+                                    </div>
+                                    <div class="detail-section example-section"
+                                        style="padding: 10px; margin-bottom: 10px;">
+                                        <h4>Example</h4>
+                                        <p id="wotdExample" style="font-size: 0.85rem; font-style: italic;"></p>
+                                    </div>
+                                </div>
+                                <button class="new-word-btn primary-btn full-width" onclick="newWord()"
+                                    style="padding: 8px 16px; font-size: 0.9rem;">
+                                    <i data-lucide="refresh-cw"></i> Next Word
+                                </button>
+                            </div>
+
+                            <!-- Toastmasters Timing Standards Cheat Sheet -->
+                            <div class="timing-cheat-sheet glass-panel">
+                                <h3><i data-lucide="clock"></i> Timing Standards</h3>
+                                <ul>
+                                    <li>
+                                        <span class="lbl">Table Topics:</span>
+                                        <span class="val">1 - 2 mins</span>
+                                        <div class="dots"><span class="dot green" title="1 min"></span><span
+                                                class="dot yellow" title="1.5 min"></span><span class="dot red"
+                                                title="2 min"></span></div>
+                                    </li>
+                                    <li>
+                                        <span class="lbl">Icebreaker:</span>
+                                        <span class="val">4 - 6 mins</span>
+                                        <div class="dots"><span class="dot green" title="4 min"></span><span
+                                                class="dot yellow" title="5 min"></span><span class="dot red"
+                                                title="6 min"></span></div>
+                                    </li>
+                                    <li>
+                                        <span class="lbl">Prepared Speech:</span>
+                                        <span class="val">5 - 7 mins</span>
+                                        <div class="dots"><span class="dot green" title="5 min"></span><span
+                                                class="dot yellow" title="6 min"></span><span class="dot red"
+                                                title="7 min"></span></div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== IMPROMPTU PANEL ===== -->
+                <div class="practice-panel" id="panel-impromptu">
+                    <div class="impromptu-layout">
+                        <!-- Left: Control Panels -->
+                        <div class="settings-card glass-panel">
+                            <div class="panel-header">
+                                <i data-lucide="sliders-horizontal"></i>
+                                <h3>Impromptu Config</h3>
+                            </div>
+                            <div class="setting-group">
+                                <label>Difficulty Level</label>
+                                <div class="level-btns">
+                                    <button class="level-btn active" id="btn-imp-beginner"
+                                        onclick="setLevel('beginner', this)"><i data-lucide="signal-low"></i>
+                                        Beginner</button>
+                                    <button class="level-btn" id="btn-imp-intermediate"
+                                        onclick="setLevel('intermediate', this)"><i data-lucide="signal-medium"></i>
+                                        Intermediate</button>
+                                    <button class="level-btn" id="btn-imp-advanced"
+                                        onclick="setLevel('advanced', this)"><i data-lucide="signal-high"></i>
+                                        Advanced</button>
+                                    <button class="level-btn" id="btn-imp-all" onclick="setLevel('all', this)"><i
+                                            data-lucide="target"></i> All Levels</button>
+                                </div>
+                            </div>
+                            <div class="setting-group">
+                                <label>Speech Category</label>
+                                <select class="category-select" id="topicCategory">
+                                    <option value="all">All Categories</option>
+                                    <option value="personal">Personal Experience</option>
+                                    <option value="opinion">Opinion & Debate</option>
+                                    <option value="storytelling">Storytelling</option>
+                                    <option value="professional">Professional</option>
+                                    <option value="creative">Creative</option>
+                                    <option value="proverbs">Proverbs</option>
+                                    <option value="situational">Situational</option>
+                                </select>
+                            </div>
+                            <div class="setting-group">
+                                <label>Speech Duration Preset</label>
+                                <div class="timer-presets">
+                                    <button class="timer-preset active"
+                                        onclick="setPracticeDuration(120, 60, 90, 120, this)">Table Topics
+                                        (1-2m)</button>
+                                    <button class="timer-preset"
+                                        onclick="setPracticeDuration(60, 30, 45, 60, this)">Quick Warmup (1m)</button>
+                                    <button class="timer-preset"
+                                        onclick="setPracticeDuration(180, 90, 135, 180, this)">Extended (3m)</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Main practice screen -->
+                        <div class="topic-display-area">
+                            <!-- Card displaying prompt -->
+                            <div class="topic-card glass-panel" id="topicCard">
+                                <div class="topic-placeholder">
+                                    <i data-lucide="dices"
+                                        style="width: 48px; height: 48px; color: var(--accent); margin-bottom: 16px;"></i>
+                                    <p>Click "Generate Topic" to begin your impromptu practice</p>
+                                </div>
+                            </div>
+
+                            <!-- Generator trigger controls -->
+                            <div class="generate-section">
+                                <button class="generate-btn primary-btn" onclick="generateTopic()"><i
+                                        data-lucide="sparkles"></i> Generate Topic</button>
+                                <button class="skip-btn outline-btn" onclick="generateTopic()">Skip <i
+                                        data-lucide="arrow-right"></i></button>
+                            </div>
+
+                            <!-- Combined timing & audio recorder console -->
+                            <div class="practice-console glass-panel">
+                                <div class="console-grid">
+                                    <!-- Timing Light Status Card -->
+                                    <div class="timer-column">
+                                        <div class="timer-display">
+                                            <div class="timer-circle" id="timerCircle">
+                                                <span id="timerDisplay">2:00</span>
+                                            </div>
+                                            <div class="timer-status" id="timerStatus">Ready</div>
+                                        </div>
+                                        <div class="timer-lights-bar">
+                                            <div class="t-light" id="light-green" title="Minimum Time Met">G</div>
+                                            <div class="t-light" id="light-yellow" title="Target Time Met">Y</div>
+                                            <div class="t-light" id="light-red" title="Maximum Time Limit Exceeded">R
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Recorder / Speech Capture Column -->
+                                    <div class="recorder-column">
+                                        <div class="mic-status-container">
+                                            <div class="mic-visualizer" id="micVisualizer">
+                                                <i data-lucide="mic" class="mic-icon"></i>
+                                                <div class="mic-ripple"></div>
+                                            </div>
+                                            <p class="mic-message" id="micMessage">Click 'Start Practice' to speak. Your
+                                                browser speech recognition will automatically transcribe your voice.</p>
+                                        </div>
+
+                                        <div class="practice-controls-row">
+                                            <button class="timer-btn start" id="startPracticeBtn"
+                                                onclick="startPracticeRun()"><i data-lucide="play"></i> Start
+                                                Practice</button>
+                                            <button class="timer-btn pause" id="stopPracticeBtn"
+                                                onclick="stopPracticeRun()" style="display:none"><i
+                                                    data-lucide="square"></i> Stop & Evaluate</button>
+                                            <button class="timer-btn reset" onclick="resetPracticeRun()"><i
+                                                    data-lucide="rotate-ccw"></i> Clear</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- RESULTS FEEDBACK DRAWER -->
+                            <div class="evaluation-results-card glass-panel" id="practiceResultsCard"
+                                style="display: none;">
+                                <div class="results-header">
+                                    <i data-lucide="award" style="color: var(--accent);"></i>
+                                    <h3>AI Speech Evaluation & Analysis</h3>
+                                </div>
+                                <div class="results-layout">
+                                    <div class="speech-recording-playback">
+                                        <label><i data-lucide="volume-2"></i> Recorded Audio Playback</label>
+                                        <audio id="audioPlayback" controls
+                                            style="width: 100%; margin-top: 8px;"></audio>
+                                    </div>
+
+                                    <div class="evaluation-metrics-grid">
+                                        <!-- Ah counter stats -->
+                                        <div class="feedback-metric-card">
+                                            <h4>Ah-Counter Dashboard</h4>
+                                            <div class="metric-score" id="resultFillerTotal">0</div>
+                                            <p class="metric-desc">Total Filler Words</p>
+
+                                            <div class="filler-detail-badges" id="fillerDetails">
+                                                <!-- Filler counts badge list -->
+                                            </div>
+                                        </div>
+
+                                        <!-- Grammarian & Pace stats -->
+                                        <div class="feedback-metric-card">
+                                            <h4>Grammarian Analysis</h4>
+                                            <div class="metric-score" id="resultPaceVal">0 <span
+                                                    class="lbl-small">wpm</span></div>
+                                            <div class="pace-badge-container" id="paceBadgeContainer">
+                                                <span class="badge" id="paceBadge">Good Pacing</span>
+                                            </div>
+                                            <p class="metric-desc" id="paceMessage">Pacing metrics estimate the verbal
+                                                rate of your delivery.</p>
+
+                                            <div class="wotd-bonus-checker" id="wotdBonusResult">
+                                                <i data-lucide="check-circle"></i> Word of the Day Check
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Realtime transcription snippet -->
+                                    <div class="transcript-box">
+                                        <label><i data-lucide="file-text"></i> Speech Transcript (Filler Words
+                                            Highlighted)</label>
+                                        <div class="transcript-content" id="resultTranscript">
+                                            Your speech script will appear here once you speak.
+                                        </div>
+                                    </div>
+
+                                    <!-- Grammarian speech improvements -->
+                                    <div class="suggestions-box">
+                                        <label><i data-lucide="sparkles"></i> Grammarian Suggestions & Tips</label>
+                                        <ul id="grammarianSuggestions">
+                                            <li>Great effort practicing! Start speaking to get real recommendations.
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Log to database -->
+                                    <button class="primary-btn" onclick="savePracticedSpeech('Table Topics')">
+                                        <i data-lucide="save"></i> Save Practice to Tracker Log
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- History -->
+                            <div class="topic-history glass-panel" id="topicHistory" style="display:none;">
+                                <div class="panel-header">
+                                    <i data-lucide="history"></i>
+                                    <h4>Topics Practiced This Session</h4>
+                                </div>
+                                <div id="historyList"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== PREPARED PRACTICE PANEL ===== -->
+                <div class="practice-panel" id="panel-prepared">
+                    <div class="prepared-layout">
+                        <!-- Left: Script Input / Teleprompter config -->
+                        <div class="settings-card glass-panel">
+                            <div class="panel-header">
+                                <i data-lucide="file-edit"></i>
+                                <h3>Prepared Speech Script</h3>
+                            </div>
+                            <div class="setting-group">
+                                <label>Speech Title</label>
+                                <input type="text" id="prepSpeechTitle" placeholder="e.g., The Icebreaker"
+                                    style="width: 100%; padding: 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--panel-border); border-radius: 8px; color: white;">
+                            </div>
+                            <div class="setting-group">
+                                <label>Prepared Script Content</label>
+                                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">Write,
+                                    paste, or load your speech script here. It will display in the teleprompter as you
+                                    practice.</p>
+                                <textarea id="prepSpeechScript"
+                                    placeholder="Start typing your speech script here... or use the Outline Builder to construct one."
+                                    rows="14"
+                                    style="width: 100%; padding: 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--panel-border); border-radius: 8px; color: white; resize: vertical; outline: none; font-family: inherit;"></textarea>
+                            </div>
+                            <div class="setting-group">
+                                <label>Speech Pacing Timer</label>
+                                <div class="timer-presets">
+                                    <button class="timer-preset active"
+                                        onclick="setPracticeDuration(420, 240, 300, 360, this)">Icebreaker
+                                        (4-6m)</button>
+                                    <button class="timer-preset"
+                                        onclick="setPracticeDuration(480, 300, 360, 420, this)">Standard Speech
+                                        (5-7m)</button>
+                                    <button class="timer-preset"
+                                        onclick="setPracticeDuration(180, 120, 150, 180, this)">Short Speech
+                                        (2-3m)</button>
+                                </div>
+                            </div>
+                            <div class="setting-group">
+                                <label class="checkbox-container"
+                                    style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text-muted); font-size: 0.9rem;">
+                                    <input type="checkbox" id="prepTeleprompter" checked
+                                        style="width: 18px; height: 18px;">
+                                    Enable Script Teleprompter Scrolling
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Right: Practice canvas & Teleprompter viewer -->
+                        <div class="prepared-canvas">
+                            <!-- Teleprompter Screen -->
+                            <div class="teleprompter-card glass-panel" id="teleprompterCard">
+                                <div class="teleprompter-header">
+                                    <div class="teleprompter-indicator"><span class="dot"></span> Teleprompter Mode
+                                    </div>
+                                    <div class="teleprompter-speed">
+                                        <label>Scroll Speed:</label>
+                                        <input type="range" id="scrollSpeedRange" min="1" max="10" value="5"
+                                            style="width: 80px;">
+                                    </div>
+                                </div>
+                                <div class="teleprompter-scroll-view" id="teleprompterScrollView">
+                                    <div class="teleprompter-placeholder" id="teleprompterPlaceholder">
+                                        <p>Type your script in the left panel or load from Outline Builder. Your speech
+                                            script will appear scrolling here during practice.</p>
+                                    </div>
+                                    <div class="teleprompter-text-body" id="teleprompterTextBody">
+                                        <!-- Script injected here -->
+                                    </div>
+                                </div>
+                                <div class="teleprompter-reading-line"></div>
+                            </div>
+
+                            <!-- Timed & recorder controls console -->
+                            <div class="practice-console glass-panel">
+                                <div class="console-grid">
+                                    <!-- Timing Light Status Card -->
+                                    <div class="timer-column">
+                                        <div class="timer-display">
+                                            <div class="timer-circle" id="prepTimerCircle">
+                                                <span id="prepTimerDisplay">6:00</span>
+                                            </div>
+                                            <div class="timer-status" id="prepTimerStatus">Ready</div>
+                                        </div>
+                                        <div class="timer-lights-bar">
+                                            <div class="t-light" id="prep-light-green">G</div>
+                                            <div class="t-light" id="prep-light-yellow">Y</div>
+                                            <div class="t-light" id="prep-light-red">R</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Speech Capture Column -->
+                                    <div class="recorder-column">
+                                        <div class="mic-status-container">
+                                            <div class="mic-visualizer" id="prepMicVisualizer">
+                                                <i data-lucide="mic" class="mic-icon"></i>
+                                                <div class="mic-ripple"></div>
+                                            </div>
+                                            <p class="mic-message" id="prepMicMessage">Practice your prepared speech.
+                                                Start recording to measure pacing and filter word frequencies.</p>
+                                        </div>
+
+                                        <div class="practice-controls-row">
+                                            <button class="timer-btn start" id="startPrepPracticeBtn"
+                                                onclick="startPreparedPracticeRun()"><i data-lucide="play"></i> Start
+                                                Practice</button>
+                                            <button class="timer-btn pause" id="stopPrepPracticeBtn"
+                                                onclick="stopPreparedPracticeRun()" style="display:none"><i
+                                                    data-lucide="square"></i> Stop & Evaluate</button>
+                                            <button class="timer-btn reset" onclick="resetPreparedPracticeRun()"><i
+                                                    data-lucide="rotate-ccw"></i> Clear</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- EVALUATION RESULTS -->
+                            <div class="evaluation-results-card glass-panel" id="preparedResultsCard"
+                                style="display: none; margin-top: 24px;">
+                                <div class="results-header">
+                                    <i data-lucide="award" style="color: var(--accent);"></i>
+                                    <h3>Prepared Speech Results & Analysis</h3>
+                                </div>
+                                <div class="results-layout">
+                                    <div class="speech-recording-playback">
+                                        <label><i data-lucide="volume-2"></i> Recorded Audio Playback</label>
+                                        <audio id="prepAudioPlayback" controls
+                                            style="width: 100%; margin-top: 8px;"></audio>
+                                    </div>
+
+                                    <div class="evaluation-metrics-grid">
+                                        <!-- Ah counter stats -->
+                                        <div class="feedback-metric-card">
+                                            <h4>Ah-Counter Dashboard</h4>
+                                            <div class="metric-score" id="prepResultFillerTotal">0</div>
+                                            <p class="metric-desc">Total Filler Words</p>
+
+                                            <div class="filler-detail-badges" id="prepFillerDetails">
+                                                <!-- Filler counts badge list -->
+                                            </div>
+                                        </div>
+
+                                        <!-- Grammarian & Pace stats -->
+                                        <div class="feedback-metric-card">
+                                            <h4>Speech Delivery Analysis</h4>
+                                            <div class="metric-score" id="prepResultPaceVal">0 <span
+                                                    class="lbl-small">wpm</span></div>
+                                            <div class="pace-badge-container" id="prepPaceBadgeContainer">
+                                                <span class="badge" id="prepPaceBadge">Excellent</span>
+                                            </div>
+                                            <p class="metric-desc" id="prepPaceMessage">Analyzed from transcription
+                                                duration.</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Realtime transcription snippet -->
+                                    <div class="transcript-box">
+                                        <label><i data-lucide="file-text"></i> Transcribed Speech</label>
+                                        <div class="transcript-content" id="prepResultTranscript">
+                                            Your speech script will appear here once you speak.
+                                        </div>
+                                    </div>
+
+                                    <!-- Grammarian speech improvements -->
+                                    <div class="suggestions-box">
+                                        <label><i data-lucide="sparkles"></i> Evaluation & Suggestions</label>
+                                        <ul id="prepGrammarianSuggestions">
+                                            <li>Great effort! Keep practicing.</li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Log to database -->
+                                    <button class="primary-btn" onclick="savePracticedSpeech('Prepared Speech')">
+                                        <i data-lucide="save"></i> Save Prepared Speech to Tracker Log
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== OUTLINE BUILDER PANEL ===== -->
+                <div class="practice-panel" id="panel-builder">
+                    <div class="builder-layout">
+                        <!-- Left: Control & stats -->
+                        <div class="settings-card glass-panel">
+                            <div class="panel-header">
+                                <i data-lucide="compass"></i>
+                                <h3>Outline Builder</h3>
+                            </div>
+                            <div class="setting-group">
+                                <label>Speech Objective</label>
+                                <select class="category-select" id="sbObjective" onchange="loadTemplate(this.value)">
+                                    <!-- Injected from script_helper.js -->
+                                </select>
+                            </div>
+
+                            <div class="setting-group outline-info-card">
+                                <p id="objectiveDesc"
+                                    style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;"></p>
+                            </div>
+
+                            <div class="setting-group">
+                                <label>Speech Topic / Theme</label>
+                                <input type="text" id="sbTopic" placeholder="e.g., Overcoming Fear of failure"
+                                    style="width: 100%; padding: 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--panel-border); border-radius: 8px; color: white;">
+                            </div>
+
+                            <div class="builder-actions-group"
+                                style="display: flex; flex-direction: column; gap: 10px;">
+                                <button class="primary-btn" onclick="generateSpeechIdeas()">
+                                    <i data-lucide="lightbulb"></i> Auto-Generate Ideas
+                                </button>
+                                <button class="outline-btn" onclick="clearSpeechBuilder()">
+                                    <i data-lucide="trash-2"></i> Clear Outline
+                                </button>
+                            </div>
+
+                            <div class="builder-stats-box glass-panel" style="margin-top: 20px; padding: 16px;">
+                                <h4
+                                    style="margin-bottom: 12px; font-size: 0.9rem; text-transform: uppercase; color: var(--text-muted);">
+                                    Estimated Script Metrics</h4>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                    <span style="color: var(--text-muted);">Total Words:</span>
+                                    <strong id="sbWordCount">0</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: var(--text-muted);">Est. Duration:</span>
+                                    <strong id="sbEstDuration">0m 00s</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Outline structural builder text areas -->
+                        <div class="builder-forms-container">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <h2 style="font-family: 'Outfit', sans-serif;">Draft Your Speech Canvas</h2>
+                                <button class="primary-btn" onclick="transferToPractice()">
+                                    <i data-lucide="arrow-right-circle"></i> Transfer to Practice Room
+                                </button>
+                            </div>
+
+                            <div id="outlineInputs">
+                                <!-- Outlines textareas injected by script_helper.js -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== SPEECH LOGS PANEL ===== -->
+                <div class="practice-panel" id="panel-speeches">
+                    <div class="center-content">
+                        <div class="panel-header center">
+                            <i data-lucide="clipboard-list"></i>
+                            <h2>Toastmasters Practice & Evaluation Logs</h2>
+                        </div>
+
+                        <div style="display: flex; justify-content: center; gap: 16px; margin: 20px 0;">
+                            <button class="add-speech-btn primary-btn" onclick="toggleSpeechForm()"><i
+                                    data-lucide="plus"></i> Log Manual Speech Event</button>
+                            <button class="outline-btn" onclick="clearSpeechTracker()"><i data-lucide="trash"></i> Reset
+                                Database</button>
+                        </div>
+
+                        <!-- Speech Input manual form -->
+                        <div class="speech-form-card glass-panel" id="speechForm">
+                            <div class="form-grid">
+                                <div class="input-group">
+                                    <label>Speech Title</label>
+                                    <input type="text" id="sfTitle" placeholder="e.g., The Icebreaker">
+                                </div>
+                                <div class="input-group">
+                                    <label>Role / Mode</label>
+                                    <select id="sfRole">
+                                        <option value="Prepared Speech">Prepared Speech</option>
+                                        <option value="Table Topics">Table Topics</option>
+                                        <option value="Evaluator">Evaluator</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label>Project / Path</label>
+                                    <input type="text" id="sfPath" placeholder="e.g., Presentation Mastery">
+                                </div>
+                                <div class="input-group">
+                                    <label>Date</label>
+                                    <input type="date" id="sfDate">
+                                </div>
+                                <div class="input-group">
+                                    <label>Pacing (WPM)</label>
+                                    <input type="number" id="sfWpm" placeholder="e.g., 130">
+                                </div>
+                                <div class="input-group">
+                                    <label>Filler Words Count</label>
+                                    <input type="number" id="sfFillers" placeholder="e.g., 3">
+                                </div>
+                                <div class="input-group full-width">
+                                    <label>Evaluation Score (1-10)</label>
+                                    <input type="number" id="sfScore" min="1" max="10" placeholder="e.g., 8">
+                                </div>
+                            </div>
+                            <button class="save-btn primary-btn full-width" onclick="addSpeech()">Save Log
+                                Entry</button>
+                        </div>
+
+                        <!-- Logs render grid -->
+                        <div id="speechesGrid" class="speeches-grid"></div>
+                    </div>
+                </div>
+
+                <!-- ===== TIPS PANEL ===== -->
+                <div class="practice-panel" id="panel-tips">
+                    <div class="panel-header center">
+                        <i data-lucide="zap"></i>
+                        <h2>Pro Toastmaster Speaking Tips</h2>
+                    </div>
+                    <div class="tips-grid" id="tipsGrid"></div>
+                </div>
+
+            </div>
+        </main>
     </div>
-</div>
-<!-- External JS -->
-<script src="./script.js"></script>
-<!-- Initialize Lucide Icons -->
-<script>
-  lucide.createIcons();
-</script>
+
+    <!-- Scripts -->
+    <script src="./script_helper.js"></script>
+    <script src="./script.js"></script>
+    <script>
+        // Initialise Lucide icons
+        lucide.createIcons();
+    </script>
 </body>
+
 </html>
